@@ -42,9 +42,9 @@ module Sorcery
           def get_current_users
             config = sorcery_config
 
-            all.query("#{config.last_activity_at_attribute_name} IS NOT NULL") \
-            .query("#{config.last_logout_at_attribute_name} IS NULL OR #{config.last_activity_at_attribute_name} > #{config.last_logout_at_attribute_name}") \
-            .query("#{config.last_activity_at_attribute_name} > ? ", config.activity_timeout.seconds.ago.utc.to_s(:db))
+            #all.query("#{config.last_activity_at_attribute_name} IS NOT NULL") \
+            #.query("#{config.last_logout_at_attribute_name} IS NULL OR #{config.last_activity_at_attribute_name} > #{config.last_logout_at_attribute_name}") \
+            #.query("#{config.last_activity_at_attribute_name} > ? ", config.activity_timeout.seconds.ago.utc.to_s(:db))
             
             #where("#{config.last_activity_at_attribute_name} IS NOT NULL") \
             #.where("#{config.last_logout_at_attribute_name} IS NULL OR #{config.last_activity_at_attribute_name} > #{config.last_logout_at_attribute_name}") \
