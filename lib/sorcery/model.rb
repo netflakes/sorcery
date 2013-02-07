@@ -23,8 +23,7 @@ module Sorcery
             # This runs the options block set in the initializer on the model class.
             ::Sorcery::Controller::Config.user_config.tap{|blk| blk.call(@sorcery_config) if blk}
 
-            init_mongoid_support! if defined?(Mongoid) and self.ancestors.include?(Mongoid::Document)
-            init_mongo_mapper_support! if defined?(MongoMapper) and self.ancestors.include?(MongoMapper::Document)
+            init_neo4j_support! if defined?(Neo4j) and self.ancestors.include?(Neo4j::Rails::Model)
 
             init_orm_hooks!
 
@@ -50,28 +49,19 @@ module Sorcery
             end
           end
 
-          # defines mongoid fields on the model class,
-          # using 1.8.x hash syntax to perserve compatibility.
-          def init_mongoid_support!
+          # defines neo4j properties on the model class,
+          def init_neo4j_support!
             self.class_eval do
               sorcery_config.username_attribute_names.each do |username|
-                field username,         :type => String
+                property username,  :type => String
               end
-              field sorcery_config.email_attribute_name,            :type => String unless sorcery_config.username_attribute_names.include?(sorcery_config.email_attribute_name)
-              field sorcery_config.crypted_password_attribute_name, :type => String
-              field sorcery_config.salt_attribute_name,             :type => String
-            end
-          end
 
-          # defines mongo_mapper fields on the model class,
-          def init_mongo_mapper_support!
-            self.class_eval do
-              sorcery_config.username_attribute_names.each do |username|
-                key username, String
-              end
-              key sorcery_config.email_attribute_name, String unless sorcery_config.username_attribute_names.include?(sorcery_config.email_attribute_name)
-              key sorcery_config.crypted_password_attribute_name, String
-              key sorcery_config.salt_attribute_name, String
+              property sorcery_config.email_attribute_name, 
+                :type => String unless sorcery_config.username_attribute_names.include?(sorcery_config.email_attribute_name)
+
+              property sorcery_config.crypted_password_attribute_name, :type => String
+              property sorcery_config.salt_attribute_name,             :type => String
+
             end
           end
 
