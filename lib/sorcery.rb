@@ -3,9 +3,7 @@ module Sorcery
   module Model
     autoload :TemporaryToken, 'sorcery/model/temporary_token'
     module Adapters
-      autoload :ActiveRecord, 'sorcery/model/adapters/active_record'
-      autoload :Mongoid, 'sorcery/model/adapters/mongoid'
-      autoload :MongoMapper, 'sorcery/model/adapters/mongo_mapper'
+      autoload :Neo4j, 'sorcery/model/adapters/neo4j'
     end
     module Submodules
       autoload :UserActivation, 'sorcery/model/submodules/user_activation'
@@ -60,24 +58,10 @@ module Sorcery
     end
 
   end
-
-  if defined?(ActiveRecord)
-    ActiveRecord::Base.send(:include, Sorcery::Model)
-    ActiveRecord::Base.send(:include, Sorcery::Model::Adapters::ActiveRecord)
-  end
-
-  if defined?(Mongoid)
-    Mongoid::Document.module_eval do
-      included do
-        attr_reader :new_record
-        include Sorcery::Model
-        include Sorcery::Model::Adapters::Mongoid
-      end
-    end
-  end
-
-  if defined?(MongoMapper)
-    MongoMapper::Document.send(:plugin, Sorcery::Model::Adapters::MongoMapper)
+  
+  if defined?(Neo4j)
+    Neo4j::Rails::Model.send(:include, Sorcery::Model)
+    Neo4j::Rails::Model.send(:include, Sorcery::Model::Adapters::Neo4j)    
   end
 
   require 'sorcery/engine' if defined?(Rails) && Rails::VERSION::MAJOR >= 3
