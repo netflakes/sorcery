@@ -31,18 +31,13 @@ module Sorcery
         
         module ClassMethods
           # get all users with last_activity within timeout
-          def current_users
-            config = sorcery_config
-            get_current_users
-          end
+          #def current_users
+          #  config = sorcery_config
+          #  get_current_users
+          #end
 
           protected
 
-          def define_activity_logging_mongoid_fields
-            field sorcery_config.last_login_at_attribute_name,    :type => Time
-            field sorcery_config.last_logout_at_attribute_name,   :type => Time
-            field sorcery_config.last_activity_at_attribute_name, :type => Time
-          end
         end
       end
     end
