@@ -28,17 +28,15 @@ module Sorcery
           end
 
           def find_by_credentials(credentials)
-             clause = @sorcery_config.username_attribute_names.map{|attribute| column_name(attribute) + " = :login"}
-             all.query(clause.join(' OR '), :login => credentials[0]).first
-
-             #sql = @sorcery_config.username_attribute_names.map{|attribute| column_name(attribute) + " = :login"}
-             #where(sql.join(' OR '), :login => credentials[0]).first             
+            @sorcery_config.username_attribute_names.each do |attribute|
+              @user = all.query(attribute => credential_regex(credentials[0])).first
+              break if @user
+            end
+            @user
           end
 
           def find_by_sorcery_token(token_attr_name, token)
             all.query("#{token_attr_name} = ?", token).first
-
-            #where("#{token_attr_name} = ?", token).first
           end
 
           def get_current_users
