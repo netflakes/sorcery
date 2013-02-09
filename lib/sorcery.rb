@@ -4,6 +4,8 @@ module Sorcery
     autoload :TemporaryToken, 'sorcery/model/temporary_token'
     module Adapters
       autoload :Neo4j, 'sorcery/model/adapters/neo4j'
+      autoload :Mongoid, 'sorcery/model/adapters/mongoid'
+      autoload :MongoMapper, 'sorcery/model/adapters/mongo_mapper'
     end
     module Submodules
       autoload :UserActivation, 'sorcery/model/submodules/user_activation'
