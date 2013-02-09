@@ -23,6 +23,11 @@ module Sorcery
             return "#{attribute}"
           end
 
+          def credential_regex(credential)
+            return { :$regex =>  /^#{credential}$/i  }  if (@sorcery_config.downcase_username_before_authenticating)
+            return credential
+          end
+
           def find_by_credentials(credentials)
             @sorcery_config.username_attribute_names.each do |attribute|
               @user = all.query(attribute => credential_regex(credentials[0])).first
